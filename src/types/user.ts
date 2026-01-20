@@ -9,7 +9,7 @@ export interface UserProfile {
   
   // Preferências
   morningPerson: boolean;
-  mainGoal: 'energy' | 'lightness' | 'balance' | 'confidence';
+  mainGoal: 'energy' | 'lightness' | 'balance' | 'confidence' | 'weightloss';
   currentChallenge: 'routine' | 'motivation' | 'knowledge' | 'time';
   
   // Progresso

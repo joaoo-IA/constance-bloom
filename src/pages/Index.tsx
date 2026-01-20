@@ -7,9 +7,10 @@ import { MethodScreen } from '@/components/screens/MethodScreen';
 import { RoutineScreen } from '@/components/screens/RoutineScreen';
 import { ProgressScreen } from '@/components/screens/ProgressScreen';
 import { HelpScreen } from '@/components/screens/HelpScreen';
+import { WeightLossScreen } from '@/components/screens/WeightLossScreen';
 
 function AppContent() {
-  const { isOnboarded } = useUser();
+  const { isOnboarded, user } = useUser();
   const [activeTab, setActiveTab] = useState('today');
 
   if (!isOnboarded) {
@@ -19,6 +20,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-background">
       {activeTab === 'today' && <TodayScreen />}
+      {activeTab === 'weightloss' && <WeightLossScreen />}
       {activeTab === 'method' && <MethodScreen />}
       {activeTab === 'routine' && <RoutineScreen />}
       {activeTab === 'progress' && <ProgressScreen />}

@@ -1,4 +1,4 @@
-import { Home, BookOpen, Calendar, TrendingUp, MessageCircle } from 'lucide-react';
+import { Home, BookOpen, Calendar, TrendingUp, MessageCircle, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface NavItem {
@@ -8,11 +8,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { id: 'today', label: 'Hoje', icon: <Home size={22} /> },
-  { id: 'method', label: 'Método', icon: <BookOpen size={22} /> },
-  { id: 'routine', label: 'Rotina', icon: <Calendar size={22} /> },
-  { id: 'progress', label: 'Progresso', icon: <TrendingUp size={22} /> },
-  { id: 'help', label: 'Ajuda', icon: <MessageCircle size={22} /> },
+  { id: 'today', label: 'Hoje', icon: <Home size={20} /> },
+  { id: 'weightloss', label: 'Emagrecer', icon: <Target size={20} /> },
+  { id: 'method', label: 'Método', icon: <BookOpen size={20} /> },
+  { id: 'routine', label: 'Rotina', icon: <Calendar size={20} /> },
+  { id: 'progress', label: 'Progresso', icon: <TrendingUp size={20} /> },
 ];
 
 interface BottomNavProps {
