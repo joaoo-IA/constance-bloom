@@ -29,10 +29,10 @@ const steps: OnboardingStep[] = [
     question: 'O que você mais busca agora?',
     subtitle: 'Escolha o que faz mais sentido pra você',
     options: [
+      { value: 'weightloss', label: 'Emagrecer', description: 'Perder peso com constância e sem dietas restritivas', icon: <Target size={24} /> },
       { value: 'energy', label: 'Mais energia', description: 'Acordar disposta e manter o pique', icon: <Zap size={24} /> },
       { value: 'lightness', label: 'Leveza no corpo', description: 'Menos inchaço, mais conforto', icon: <Leaf size={24} /> },
-      { value: 'balance', label: 'Equilíbrio', description: 'Parar de oscilar tanto', icon: <Target size={24} /> },
-      { value: 'confidence', label: 'Autoconfiança', description: 'Me sentir bem comigo mesma', icon: <Heart size={24} /> },
+      { value: 'balance', label: 'Equilíbrio', description: 'Parar de oscilar tanto', icon: <Heart size={24} /> },
     ],
   },
   {
