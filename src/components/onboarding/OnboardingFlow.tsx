@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { useUser } from '@/contexts/UserContext';
-import { UserProfile } from '@/types/user';
-import { Leaf, Sun, Moon, Zap, Heart, Target, Clock, Users, Sparkles, ArrowRight } from 'lucide-react';
+import { Leaf, Sun, Moon, Zap, Heart, Target, Clock, Users, Sparkles, ArrowRight, Calendar } from 'lucide-react';
 
 interface OnboardingStep {
   id: string;
@@ -68,10 +66,21 @@ const steps: OnboardingStep[] = [
   },
 ];
 
-import { Calendar } from 'lucide-react';
+interface OnboardingData {
+  name: string;
+  rhythm: string;
+  consistency: string;
+  supportLevel: string;
+  morningPerson: boolean;
+  mainGoal: string;
+  currentChallenge: string;
+}
 
-export function OnboardingFlow() {
-  const { setUser, setIsOnboarded, setTodayFocus } = useUser();
+interface OnboardingFlowProps {
+  onComplete: (data: OnboardingData) => void;
+}
+
+export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [name, setName] = useState('');
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -81,10 +90,11 @@ export function OnboardingFlow() {
   const isLastStep = currentStep === steps.length - 1;
 
   const handleSelect = (value: string) => {
-    setAnswers(prev => ({ ...prev, [step.id]: value }));
+    const newAnswers = { ...answers, [step.id]: value };
+    setAnswers(newAnswers);
     
     if (isLastStep) {
-      completeOnboarding(value);
+      completeOnboarding(newAnswers);
     } else {
       setTimeout(() => setCurrentStep(prev => prev + 1), 300);
     }
@@ -96,36 +106,16 @@ export function OnboardingFlow() {
     }
   };
 
-  const completeOnboarding = (lastAnswer: string) => {
-    const profile: UserProfile = {
-      id: '1',
+  const completeOnboarding = (finalAnswers: Record<string, string>) => {
+    onComplete({
       name: name,
-      rhythm: (answers.rhythm || lastAnswer) as UserProfile['rhythm'],
+      rhythm: finalAnswers.rhythm || 'moderate',
       consistency: 'starting',
-      supportLevel: (answers.support || lastAnswer) as UserProfile['supportLevel'],
+      supportLevel: finalAnswers.support || 'regular',
       morningPerson: true,
-      mainGoal: answers.goal as UserProfile['mainGoal'],
-      currentChallenge: answers.challenge as UserProfile['currentChallenge'],
-      currentDay: 1,
-      currentPillar: 1,
-      streak: 0,
-      todayCompleted: false,
-    };
-
-    setUser(profile);
-    
-    // Define foco inicial baseado no perfil
-    setTodayFocus({
-      id: '1',
-      title: 'Seu primeiro passo',
-      description: 'Beba um copo de água morna ao acordar. Simples assim.',
-      pillarId: 1,
-      type: 'action',
-      duration: '2 min',
-      completed: false,
+      mainGoal: finalAnswers.goal || 'balance',
+      currentChallenge: finalAnswers.challenge || 'routine',
     });
-
-    setTimeout(() => setIsOnboarded(true), 500);
   };
 
   return (
@@ -179,9 +169,8 @@ export function OnboardingFlow() {
                 <Button
                   onClick={handleNameSubmit}
                   disabled={!name.trim()}
-                  fullWidth
+                  className="w-full gap-2"
                   size="lg"
-                  className="gap-2"
                 >
                   Continuar
                   <ArrowRight size={20} />

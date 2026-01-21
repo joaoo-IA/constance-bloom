@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Leaf, Target, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useUser } from '@/contexts/UserContext';
 import { missions, getRandomCompletionMessage, cycleCompleteMessage } from '@/data/missions';
 import { cn } from '@/lib/utils';
 
-export function WeightLossScreen() {
-  const { user, completeMission, missionDay } = useUser();
+interface WeightLossScreenProps {
+  missionDay: number;
+  missionCompleted: boolean;
+  onCompleteMission: () => void;
+}
+
+export function WeightLossScreen({ missionDay, missionCompleted, onCompleteMission }: WeightLossScreenProps) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [isCycleComplete, setIsCycleComplete] = useState(false);
@@ -25,7 +29,7 @@ export function WeightLossScreen() {
       setIsCycleComplete(false);
     }
     setShowFeedback(true);
-    completeMission();
+    onCompleteMission();
   };
 
   const closeFeedback = () => {
@@ -89,17 +93,30 @@ export function WeightLossScreen() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-card rounded-2xl p-6 border-2 border-primary/20 shadow-natural"
+            className={cn(
+              "bg-card rounded-2xl p-6 border-2 shadow-natural",
+              missionCompleted ? "border-primary/50 bg-accent/30" : "border-primary/20"
+            )}
           >
             <div className="flex items-start gap-4">
-              <div className="p-3 bg-primary/10 rounded-xl shrink-0">
-                <Leaf className="text-primary" size={28} />
+              <div className={cn(
+                "p-3 rounded-xl shrink-0",
+                missionCompleted ? "bg-primary" : "bg-primary/10"
+              )}>
+                {missionCompleted ? (
+                  <Check className="text-primary-foreground" size={28} />
+                ) : (
+                  <Leaf className="text-primary" size={28} />
+                )}
               </div>
               <div className="flex-1">
                 <span className="text-xs font-medium text-primary uppercase tracking-wide">
                   Dia {currentDay}
                 </span>
-                <h3 className="text-xl font-bold text-text-primary mt-1 mb-2">
+                <h3 className={cn(
+                  "text-xl font-bold mt-1 mb-2",
+                  missionCompleted ? "text-primary" : "text-text-primary"
+                )}>
                   {currentMission.title}
                 </h3>
                 <p className="text-text-secondary leading-relaxed">
@@ -108,14 +125,23 @@ export function WeightLossScreen() {
               </div>
             </div>
 
-            <Button
-              onClick={handleCompleteMission}
-              className="w-full mt-6 gap-2"
-              size="lg"
-            >
-              <Check size={20} />
-              Concluir missão do dia
-            </Button>
+            {!missionCompleted && (
+              <Button
+                onClick={handleCompleteMission}
+                className="w-full mt-6 gap-2"
+                size="lg"
+              >
+                <Check size={20} />
+                Concluir missão do dia
+              </Button>
+            )}
+
+            {missionCompleted && (
+              <div className="mt-6 flex items-center justify-center gap-2 py-3 text-primary font-semibold">
+                <Check size={22} />
+                <span>Missão concluída! 🎉</span>
+              </div>
+            )}
           </motion.div>
         </div>
 
