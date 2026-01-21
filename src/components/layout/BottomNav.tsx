@@ -1,4 +1,4 @@
-import { Home, BookOpen, Calendar, TrendingUp, MessageCircle, Target } from 'lucide-react';
+import { Home, BookOpen, Calendar, TrendingUp, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface NavItem {
@@ -7,20 +7,31 @@ interface NavItem {
   icon: React.ReactNode;
 }
 
-const navItems: NavItem[] = [
+const baseNavItems: NavItem[] = [
   { id: 'today', label: 'Hoje', icon: <Home size={20} /> },
-  { id: 'weightloss', label: 'Emagrecer', icon: <Target size={20} /> },
   { id: 'method', label: 'Método', icon: <BookOpen size={20} /> },
   { id: 'routine', label: 'Rotina', icon: <Calendar size={20} /> },
   { id: 'progress', label: 'Progresso', icon: <TrendingUp size={20} /> },
 ];
 
+const weightLossNavItem: NavItem = { 
+  id: 'weightloss', 
+  label: 'Emagrecer', 
+  icon: <Target size={20} /> 
+};
+
 interface BottomNavProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
+  showWeightLoss?: boolean;
 }
 
-export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
+export function BottomNav({ activeTab, onTabChange, showWeightLoss = false }: BottomNavProps) {
+  // Build nav items dynamically
+  const navItems = showWeightLoss 
+    ? [baseNavItems[0], weightLossNavItem, ...baseNavItems.slice(1)]
+    : baseNavItems;
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-natural z-50">
       <div className="max-w-md mx-auto flex items-center justify-around py-2 px-2">

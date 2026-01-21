@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useUser } from '@/contexts/UserContext';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, Send, Sparkles, Leaf, Clock, Heart, Info } from 'lucide-react';
+import { Send, Sparkles, Leaf, Clock, Heart, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Message {
@@ -12,19 +11,27 @@ interface Message {
   timestamp: Date;
 }
 
+interface UserProfile {
+  name: string;
+}
+
+interface HelpScreenProps {
+  user: UserProfile | null;
+}
+
 const quickQuestions = [
   { id: 1, text: 'O que fazer quando perco a motivação?', icon: <Heart size={16} /> },
   { id: 2, text: 'Como adaptar minha rotina?', icon: <Clock size={16} /> },
   { id: 3, text: 'O que comer no jantar?', icon: <Leaf size={16} /> },
 ];
 
-export function HelpScreen() {
-  const { user } = useUser();
+export function HelpScreen({ user }: HelpScreenProps) {
+  const userName = user?.name || 'querida';
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       role: 'assistant',
-      content: `Olá, ${user?.name || 'querida'}! 💚 Sou sua coach digital do Guia Monjaro Natural. Estou aqui para te ajudar a encontrar clareza no seu caminho. O que você precisa hoje?`,
+      content: `Olá, ${userName}! 💚 Sou sua coach digital do Guia Monjaro Natural. Estou aqui para te ajudar a encontrar clareza no seu caminho. O que você precisa hoje?`,
       timestamp: new Date(),
     },
   ]);
@@ -46,7 +53,7 @@ export function HelpScreen() {
 
     // Simulate AI response
     setTimeout(() => {
-      const aiResponse = generateResponse(messageText, user?.name || 'querida');
+      const aiResponse = generateResponse(messageText, userName);
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',

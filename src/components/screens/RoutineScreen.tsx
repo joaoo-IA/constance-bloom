@@ -1,8 +1,15 @@
 import { motion } from 'framer-motion';
-import { useUser } from '@/contexts/UserContext';
 import { ChevronLeft, ChevronRight, CheckCircle, Circle, Sparkles, Sun, Cloud, Moon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+
+interface UserProfile {
+  name: string;
+}
+
+interface RoutineScreenProps {
+  user: UserProfile | null;
+}
 
 const weekDays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 
@@ -43,8 +50,7 @@ const timeSuggestions = [
   },
 ];
 
-export function RoutineScreen() {
-  const { user } = useUser();
+export function RoutineScreen({ user }: RoutineScreenProps) {
   const [selectedDay, setSelectedDay] = useState(3); // Thursday
 
   return (

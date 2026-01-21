@@ -1,16 +1,32 @@
 import { motion } from 'framer-motion';
-import { useUser } from '@/contexts/UserContext';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Circle, Sparkles, Flame, Clock, ChevronRight, Leaf } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export function TodayScreen() {
-  const { user, todayFocus, completeFocus } = useUser();
+interface UserProfile {
+  id: string;
+  name: string;
+  streak: number;
+  currentDay: number;
+}
 
-  if (!user || !todayFocus) return null;
+interface TodayScreenProps {
+  user: UserProfile | null;
+  focusCompleted: boolean;
+  onCompleteFocus: () => void;
+}
+
+const todayFocus = {
+  title: 'Seu primeiro passo',
+  description: 'Beba um copo de água morna ao acordar. Simples assim.',
+  duration: '2 min'
+};
+
+export function TodayScreen({ user, focusCompleted, onCompleteFocus }: TodayScreenProps) {
+  if (!user) return null;
 
   const greeting = getGreeting();
-  const motivationalMessage = getMotivationalMessage(user.streak, todayFocus.completed);
+  const motivationalMessage = getMotivationalMessage(user.streak, focusCompleted);
 
   return (
     <div className="min-h-screen bg-gradient-soft pb-24">
@@ -63,7 +79,7 @@ export function TodayScreen() {
           transition={{ delay: 0.2 }}
           className={cn(
             "rounded-3xl p-6 shadow-natural-lg transition-all duration-500",
-            todayFocus.completed
+            focusCompleted
               ? "bg-accent border-2 border-primary/30"
               : "bg-card"
           )}
@@ -87,7 +103,7 @@ export function TodayScreen() {
             <div className="space-y-2">
               <h2 className={cn(
                 "text-xl font-bold transition-colors",
-                todayFocus.completed ? "text-primary" : "text-text-primary"
+                focusCompleted ? "text-primary" : "text-text-primary"
               )}>
                 {todayFocus.title}
               </h2>
@@ -97,12 +113,11 @@ export function TodayScreen() {
             </div>
 
             {/* Action Button */}
-            {!todayFocus.completed ? (
+            {!focusCompleted ? (
               <Button
-                onClick={completeFocus}
-                fullWidth
+                onClick={onCompleteFocus}
+                className="w-full mt-4 gap-2"
                 size="lg"
-                className="mt-4 gap-2"
               >
                 <Circle size={20} />
                 Concluir foco do dia

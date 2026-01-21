@@ -1,7 +1,16 @@
 import { motion } from 'framer-motion';
-import { useUser } from '@/contexts/UserContext';
 import { Flame, TrendingUp, Award, Calendar, Sparkles, Heart, Zap, Leaf } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+interface UserProfile {
+  name: string;
+  currentDay: number;
+}
+
+interface ProgressScreenProps {
+  user: UserProfile | null;
+  streak: number;
+}
 
 const milestones = [
   { id: 1, title: 'Primeiro passo', description: 'Você começou!', icon: <Zap size={20} />, achieved: true },
@@ -20,9 +29,7 @@ const weekHistory = [
   { day: 'Dom', completed: false },
 ];
 
-export function ProgressScreen() {
-  const { user } = useUser();
-
+export function ProgressScreen({ user, streak }: ProgressScreenProps) {
   if (!user) return null;
 
   return (
@@ -52,7 +59,7 @@ export function ProgressScreen() {
         >
           <StatCard
             icon={<Flame className="text-primary" size={24} />}
-            value={user.streak}
+            value={streak}
             label="dias seguidos"
             highlight
           />
